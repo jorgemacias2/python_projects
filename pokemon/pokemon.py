@@ -11,6 +11,10 @@ def retrieve_type(pokemon):
     type_url = types[0]["type"]["url"]
     return type_url
 
+def retrieve_stats(pokemon):
+    stats = pokemon["stats"]
+    return stats
+
 def get_type(type_url):
     result = requests.get(type_url)
     type = result.json()
@@ -30,40 +34,50 @@ def get_damage_to(type):
     damage_to = [sub["name"] for sub in damage_pk]
     return damage_to
 
-def get_winner():
-    if pk1_type_pk in pk2_damage_to or pk2_type_pk in pk1_damage_from:
+def get_winner(pk1_data, pk2_data):
+    if pk1_data["pk_type_pk"] in pk2_data["pk_damage_to"]:
         pokemon_winner = pk2_name_input
-    elif pk2_type_pk in pk1_damage_to or pk1_type_pk in pk2_damage_from:
+    elif pk2_data["pk_type_pk"] in pk1_data["pk_damage_to"]:
         pokemon_winner = pk1_name_input
+    elif pk1_data["pk_bs_avg"] > pk2_data["pk_bs_avg"]:
+        pokemon_winner = pk1_name_input
+    elif pk2_data["pk_bs_avg"] > pk1_data["pk_bs_avg"]:
+        pokemon_winner = pk2_name_input
     else:
         pokemon_winner = "Winner can't be determined"
     return pokemon_winner
 
-pk1_name_input = input("Which is your first Pokemon choice: ")
-pk1_choice = get_pokemon(pk1_name_input)
-pk1_type_url = retrieve_type(pk1_choice)
-pk1_type = get_type(pk1_type_url)
-pk1_type_pk = get_pk_type(pk1_type)
-pk1_damage_from = get_damage_from(pk1_type)
-pk1_damage_to = get_damage_to(pk1_type)
+def input_pokemon(pk_name_input):
+    pk_choice = get_pokemon(pk_name_input)
+    pk_type_url = retrieve_type(pk_choice)
+    pk_type = get_type(pk_type_url)
+    pk_type_pk = get_pk_type(pk_type)
+    pk_damage_from = get_damage_from(pk_type)
+    pk_damage_to = get_damage_to(pk_type)
+    print("First Pokemon type is: ", pk_type_pk)
+    print("First Pokemon weakness is against: ", pk_damage_from)
+    print("First Pokemon strength is against: ", pk_damage_to)
+    stat_list = retrieve_stats(pk_choice)
+    pk_bs_avg = best_pk_stat(stat_list)
+    return {"pk_damage_to":pk_damage_to, "pk_type_pk":pk_type_pk, "pk_bs_avg":pk_bs_avg}
 
-print("First Pokemon type is: ", pk1_type_pk)
-print("First Pokemon weakness is against: ", pk1_damage_from)
-print("First Pokemon strength is against: ", pk1_damage_to)
+def best_pk_stat(pk_stats):
+    sum_base_stat = 0
+    for stat in pk_stats:
+        base_stat = stat["base_stat"]
+        sum_base_stat = base_stat + sum_base_stat
+    pk_avg = sum_base_stat / len(pk_stats)
+    return pk_avg
+
+pk1_name_input = input("Which is your first Pokemon choice: ")
+pk1_result = input_pokemon(pk1_name_input)
 
 pk2_name_input = input("Which is your second Pokemon choice: ")
-pk2_choice = get_pokemon(pk2_name_input)
-pk2_type_url = retrieve_type(pk2_choice)
-pk2_type = get_type(pk2_type_url)
-pk2_type_pk = get_pk_type(pk2_type)
-pk2_damage_from = get_damage_from(pk2_type)
-pk2_damage_to = get_damage_to(pk2_type)
-print("Second Pokemon type is: ", pk2_type_pk)
-print("Second Pokemon weakness is against: ", pk2_damage_from)
-print("Second Pokemon strength is against: ", pk2_damage_to)
+pk2_result = input_pokemon(pk2_name_input)
 
-pk_winner = get_winner()
+pk_winner = get_winner(pk1_result, pk2_result)
 print("The winner is...: ", pk_winner)
+
 
 
 
