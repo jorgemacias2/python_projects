@@ -51,6 +51,7 @@ def get_damage_from(type):
             j += 1
         i += 1
         j = 0
+    damage_from = list(dict.fromkeys(damage_from))
     return damage_from
 
 def get_damage_to(type):
@@ -70,12 +71,13 @@ def get_damage_to(type):
             j += 1
         i += 1
         j = 0
+    damage_to = list(dict.fromkeys(damage_to))
     return damage_to
 
 def get_winner(pk1_data, pk2_data):
-    if pk1_data["pk_type_pk"] in pk2_data["pk_damage_to"]:
+    if any(x in pk1_data["pk_type_pk"] for x in pk2_data["pk_damage_to"]):
         pokemon_winner = pk2_name_input
-    elif pk2_data["pk_type_pk"] in pk1_data["pk_damage_to"]:
+    elif any(x in pk2_data["pk_type_pk"] for x in pk1_data["pk_damage_to"]):
         pokemon_winner = pk1_name_input
     elif pk1_data["pk_bs_avg"] > pk2_data["pk_bs_avg"]:
         pokemon_winner = pk1_name_input
@@ -92,9 +94,9 @@ def input_pokemon(pk_name_input):
     pk_type_pk = get_pk_type(pk_type)
     pk_damage_from = get_damage_from(pk_type)
     pk_damage_to = get_damage_to(pk_type)
-    print("First Pokemon type is: ", pk_type_pk)
-    print("First Pokemon weakness is against: ", pk_damage_from)
-    print("First Pokemon strength is against: ", pk_damage_to)
+    print("Pokemon type is: ", pk_type_pk)
+    print("Pokemon strength is against: ", pk_damage_to)
+    print("Pokemon weakness is against: ", pk_damage_from)
     stat_list = retrieve_stats(pk_choice)
     pk_bs_avg = best_pk_stat(stat_list)
     return {"pk_damage_to":pk_damage_to, "pk_type_pk":pk_type_pk, "pk_bs_avg":pk_bs_avg}
