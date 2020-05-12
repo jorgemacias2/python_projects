@@ -75,7 +75,9 @@ def get_damage_to(type):
     return damage_to
 
 def get_winner(pk1_data, pk2_data):
-    if any(x in pk1_data["pk_type_pk"] for x in pk2_data["pk_damage_to"]):
+    if any(x in pk1_data["pk_type_pk"] for x in pk2_data["pk_damage_to"]) and any(x in pk2_data["pk_type_pk"] for x in pk1_data["pk_damage_to"]):
+        pokemon_winner = "Winner can't be determined"
+    elif any(x in pk1_data["pk_type_pk"] for x in pk2_data["pk_damage_to"]):
         pokemon_winner = pk2_name_input
     elif any(x in pk2_data["pk_type_pk"] for x in pk1_data["pk_damage_to"]):
         pokemon_winner = pk1_name_input
