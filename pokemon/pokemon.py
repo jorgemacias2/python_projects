@@ -8,7 +8,7 @@ def get_pokemon(pokemon_name):
 
 def retrieve_type(pokemon):
     types = pokemon["types"]
-    type_url = types[0]["type"]["url"]
+    type_url = [sub["type"]["url"] for sub in types]
     return type_url
 
 def retrieve_stats(pokemon):
@@ -16,22 +16,60 @@ def retrieve_stats(pokemon):
     return stats
 
 def get_type(type_url):
-    result = requests.get(type_url)
-    type = result.json()
+    type = []
+    i = 0
+    while i < len(type_url):
+        result = requests.get(type_url[i])
+        type1 = result.json()
+        type.insert(i, type1)
+        i += 1
     return type
 
 def get_pk_type(type):
-    pokemon_type = type["name"]
+    pokemon_type = []
+    i = 0
+    while i < len(type):
+        pokemon_type1 = type[i]["name"]
+        pokemon_type.insert(i, pokemon_type1)
+        i += 1
     return pokemon_type
 
 def get_damage_from(type):
-    damage_pk = type["damage_relations"]["double_damage_from"]
-    damage_from = [sub["name"] for sub in damage_pk]
+    i = 0
+    damage_from1 = []
+    while i < len(type):
+        damage_pk1 = type[i]["damage_relations"]["double_damage_from"]
+        damage_from1.insert(i, [sub["name"] for sub in damage_pk1])
+        i += 1
+    damage_from = []
+    i = 0
+    j = 0
+    while i < len(damage_from1):
+        while j < len(damage_from1[i]):
+            bloque12 = damage_from1[i][j]
+            damage_from.insert(j + len(damage_from), bloque12)
+            j += 1
+        i += 1
+        j = 0
     return damage_from
 
 def get_damage_to(type):
-    damage_pk = type["damage_relations"]["double_damage_to"]
-    damage_to = [sub["name"] for sub in damage_pk]
+    i = 0
+    damage_to1 = []
+    while i < len(type):
+        damage_pk2 = type[i]["damage_relations"]["double_damage_to"]
+        damage_to1.insert(i, [sub["name"] for sub in damage_pk2])
+        i += 1
+    damage_to = []
+    i = 0
+    j = 0
+    while i < len(damage_to1):
+        while j < len(damage_to1[i]):
+            bloque12 = damage_to1[i][j]
+            damage_to.insert(j + len(damage_to), bloque12)
+            j += 1
+        i += 1
+        j = 0
     return damage_to
 
 def get_winner(pk1_data, pk2_data):
@@ -77,7 +115,3 @@ pk2_result = input_pokemon(pk2_name_input)
 
 pk_winner = get_winner(pk1_result, pk2_result)
 print("The winner is...: ", pk_winner)
-
-
-
-
