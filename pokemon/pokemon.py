@@ -138,7 +138,7 @@ pk2_name_input = input("Which is your second Pokemon choice: ")
 pk2_result = input_pokemon(pk2_name_input)
 
 pk_winner = find_winner(pk1_result, pk2_result)
-print("The winner is...: ", pk_winner["name"])
+print("The winner is...: ", pk_winner["name"] if pk_winner else "nobody")
 
 #pk_winner = get_winner(pk1_result, pk2_result)
 #print("The winner is...: ", pk_winner)
