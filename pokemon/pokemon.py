@@ -53,7 +53,6 @@ def get_damage_from(type):
             half_damage_from = list(dict.fromkeys(damage_from))
         if damages == "no_damage_from":
             no_damage_from = list(dict.fromkeys(damage_from))
-        damage_from = []
         damage_from1 = []
     return (double_damage_from, half_damage_from, no_damage_from)
 
@@ -74,7 +73,6 @@ def get_damage_to(type):
             half_damage_to = list(dict.fromkeys(damage_to))
         if damages == "no_damage_to":
             no_damage_to = list(dict.fromkeys(damage_to))
-        damage_to = []
         damage_to1 = []
     return (double_damage_to, half_damage_to, no_damage_to)
 
