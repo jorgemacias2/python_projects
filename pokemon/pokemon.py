@@ -1,4 +1,6 @@
 import requests
+import json
+import os.path
 
 def get_pokemon(pokemon_name):
     url = "https://pokeapi.co/api/v2/pokemon/{pk}".format(pk=pokemon_name)
@@ -6,53 +8,46 @@ def get_pokemon(pokemon_name):
     pokemon = result.json()
     return pokemon
 
-def retrieve_type(pokemon):
-    types = pokemon["types"]
-    type_url = [sub["type"]["url"] for sub in types]
-    return type_url
-
 def retrieve_stats(pokemon):
     stats = pokemon["stats"]
     return stats
 
-def get_type(type_url):
+def get_type(pk_choice):
+    types = pk_choice["types"]
+    types_list = [sub["type"] for sub in types]
     type = []
-    i = 0
-    while i < len(type_url):
-        result = requests.get(type_url[i])
-        type1 = result.json()
-        type.insert(i, type1)
-        i += 1
+    for type_element in types_list:
+        if os.path.exists(type_element["name"]+".json"):
+            with open(type_element["name"]+".json", "r") as file:
+                file_result = json.loads(file.read())
+                type.append(file_result)
+        else:
+            result = requests.get(type_element["url"])
+            type1 = result.json()
+            with open(type1["name"]+".json", "w") as file:
+                file.write(json.dumps(type1))
+            type.append(type1)
     return type
 
-def get_pk_type(type):
+def get_pk_type(type_list):
     pokemon_type = []
-    i = 0
-    while i < len(type):
-        pokemon_type1 = type[i]["name"]
-        pokemon_type.insert(i, pokemon_type1)
-        i += 1
+    for type_element in type_list:
+        pokemon_type1 = type_element["name"]
+        pokemon_type.append(pokemon_type1)
     return pokemon_type
 
 def get_damage_from(type):
-    i = 0
+    #types_of_damages = ["double_damage_from", "half_damage_from", "no_damage_from"]
     damage_from1 = []
-    while i < len(type):
-        damage_pk1 = type[i]["damage_relations"]["double_damage_from"]
-        damage_from1.insert(i, [sub["name"] for sub in damage_pk1])
-        i += 1
+    for type_damage in type:
+        damage_pk1 = type_damage["damage_relations"]["double_damage_from"]
+        damage_from1.append([sub["name"] for sub in damage_pk1])
     damage_from = []
-    i = 0
-    j = 0
-    while i < len(damage_from1):
-        while j < len(damage_from1[i]):
-            bloque12 = damage_from1[i][j]
-            damage_from.insert(j + len(damage_from), bloque12)
-            j += 1
-        i += 1
-        j = 0
+    for x in damage_from1:
+        for y in x:
+            damage_from.append(y)
     damage_from = list(dict.fromkeys(damage_from))
-    return damage_from
+    return (damage_from)
 
 def get_half_damage_from(type):
     i = 0
@@ -190,8 +185,7 @@ def get_winner(pk1_data, pk2_data):
 
 def input_pokemon(pk_name_input):
     pk_choice = get_pokemon(pk_name_input)
-    pk_type_url = retrieve_type(pk_choice)
-    pk_type = get_type(pk_type_url)
+    pk_type = get_type(pk_choice)
     pk_type_pk = get_pk_type(pk_type)
     pk_damage_from = get_damage_from(pk_type)
     pk_half_damage_from = get_half_damage_from(pk_type)
