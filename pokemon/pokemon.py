@@ -72,7 +72,7 @@ def get_damage_to(type):
             double_damage_to = list(dict.fromkeys(damage_to))
         if damages == "half_damage_to":
             half_damage_to = list(dict.fromkeys(damage_to))
-        if  damages == "no_damage_to":
+        if damages == "no_damage_to":
             no_damage_to = list(dict.fromkeys(damage_to))
         damage_to = []
         damage_to1 = []
