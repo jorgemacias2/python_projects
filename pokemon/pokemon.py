@@ -37,117 +37,46 @@ def get_pk_type(type_list):
     return pokemon_type
 
 def get_damage_from(type):
-    #types_of_damages = ["double_damage_from", "half_damage_from", "no_damage_from"]
+    types_of_damages = ["double_damage_from", "half_damage_from", "no_damage_from"]
     damage_from1 = []
-    for type_damage in type:
-        damage_pk1 = type_damage["damage_relations"]["double_damage_from"]
-        damage_from1.append([sub["name"] for sub in damage_pk1])
-    damage_from = []
-    for x in damage_from1:
-        for y in x:
-            damage_from.append(y)
-    damage_from = list(dict.fromkeys(damage_from))
-    return (damage_from)
-
-def get_half_damage_from(type):
-    i = 0
-    half_damage_from1 = []
-    while i < len(type):
-        damage_pk1 = type[i]["damage_relations"]["half_damage_from"]
-        half_damage_from1.insert(i, [sub["name"] for sub in damage_pk1])
-        i += 1
-    half_damage_from = []
-    i = 0
-    j = 0
-    while i < len(half_damage_from1):
-        while j < len(half_damage_from1[i]):
-            bloque12 = half_damage_from1[i][j]
-            half_damage_from.insert(j + len(half_damage_from), bloque12)
-            j += 1
-        i += 1
-        j = 0
-    half_damage_from = list(dict.fromkeys(half_damage_from))
-    return half_damage_from
+    for damages in types_of_damages:
+        for type_damage in type:
+            damage_pk1 = type_damage["damage_relations"][damages]
+            damage_from1.append([sub["name"] for sub in damage_pk1])
+        damage_from = []
+        for x in damage_from1:
+            for y in x:
+                damage_from.append(y)
+        if damages == "double_damage_from":
+            double_damage_from = list(dict.fromkeys(damage_from))
+        if damages == "half_damage_from":
+            half_damage_from = list(dict.fromkeys(damage_from))
+        if damages == "no_damage_from":
+            no_damage_from = list(dict.fromkeys(damage_from))
+        damage_from = []
+        damage_from1 = []
+    return (double_damage_from, half_damage_from, no_damage_from)
 
 def get_damage_to(type):
-    i = 0
+    types_of_damages = ["double_damage_to", "half_damage_to", "no_damage_to"]
     damage_to1 = []
-    while i < len(type):
-        damage_pk2 = type[i]["damage_relations"]["double_damage_to"]
-        damage_to1.insert(i, [sub["name"] for sub in damage_pk2])
-        i += 1
-    damage_to = []
-    i = 0
-    j = 0
-    while i < len(damage_to1):
-        while j < len(damage_to1[i]):
-            bloque12 = damage_to1[i][j]
-            damage_to.insert(j + len(damage_to), bloque12)
-            j += 1
-        i += 1
-        j = 0
-    damage_to = list(dict.fromkeys(damage_to))
-    return damage_to
-
-def get_half_damage_to(type):
-    i = 0
-    half_damage_to1 = []
-    while i < len(type):
-        damage_pk1 = type[i]["damage_relations"]["half_damage_to"]
-        half_damage_to1.insert(i, [sub["name"] for sub in damage_pk1])
-        i += 1
-    half_damage_to = []
-    i = 0
-    j = 0
-    while i < len(half_damage_to1):
-        while j < len(half_damage_to1[i]):
-            bloque12 = half_damage_to1[i][j]
-            half_damage_to.insert(j + len(half_damage_to), bloque12)
-            j += 1
-        i += 1
-        j = 0
-    half_damage_to = list(dict.fromkeys(half_damage_to))
-    return half_damage_to
-
-def get_no_damage_to(type):
-    i = 0
-    no_damage_to1 = []
-    while i < len(type):
-        damage_pk1 = type[i]["damage_relations"]["no_damage_to"]
-        no_damage_to1.insert(i, [sub["name"] for sub in damage_pk1])
-        i += 1
-    no_damage_to = []
-    i = 0
-    j = 0
-    while i < len(no_damage_to1):
-        while j < len(no_damage_to1[i]):
-            bloque12 = no_damage_to1[i][j]
-            no_damage_to.insert(j + len(no_damage_to), bloque12)
-            j += 1
-        i += 1
-        j = 0
-    no_damage_to = list(dict.fromkeys(no_damage_to))
-    return no_damage_to
-
-def get_no_damage_from(type):
-    i = 0
-    no_damage_from1 = []
-    while i < len(type):
-        damage_pk1 = type[i]["damage_relations"]["no_damage_from"]
-        no_damage_from1.insert(i, [sub["name"] for sub in damage_pk1])
-        i += 1
-    no_damage_from = []
-    i = 0
-    j = 0
-    while i < len(no_damage_from1):
-        while j < len(no_damage_from1[i]):
-            bloque12 = no_damage_from1[i][j]
-            no_damage_from.insert(j + len(no_damage_from), bloque12)
-            j += 1
-        i += 1
-        j = 0
-    no_damage_from = list(dict.fromkeys(no_damage_from))
-    return no_damage_from
+    for damages in types_of_damages:
+        for type_damage in type:
+            damage_pk1 = type_damage["damage_relations"][damages]
+            damage_to1.append([sub["name"] for sub in damage_pk1])
+        damage_to = []
+        for x in damage_to1:
+            for y in x:
+                damage_to.append(y)
+        if damages == "double_damage_to":
+            double_damage_to = list(dict.fromkeys(damage_to))
+        if damages == "half_damage_to":
+            half_damage_to = list(dict.fromkeys(damage_to))
+        if  damages == "no_damage_to":
+            no_damage_to = list(dict.fromkeys(damage_to))
+        damage_to = []
+        damage_to1 = []
+    return (double_damage_to, half_damage_to, no_damage_to)
 
 def get_points(pk1_data, pk2_data):
     pk_points = 0
@@ -187,12 +116,12 @@ def input_pokemon(pk_name_input):
     pk_choice = get_pokemon(pk_name_input)
     pk_type = get_type(pk_choice)
     pk_type_pk = get_pk_type(pk_type)
-    pk_damage_from = get_damage_from(pk_type)
-    pk_half_damage_from = get_half_damage_from(pk_type)
-    pk_damage_to = get_damage_to(pk_type)
-    pk_half_damage_to = get_half_damage_to(pk_type)
-    pk_no_damage_to = get_no_damage_to(pk_type)
-    pk_no_damage_from = get_no_damage_from(pk_type)
+    pk_damage_from = get_damage_from(pk_type)[0]
+    pk_half_damage_from = get_damage_from(pk_type)[1]
+    pk_damage_to = get_damage_to(pk_type)[0]
+    pk_half_damage_to = get_damage_to(pk_type)[1]
+    pk_no_damage_to = get_damage_to(pk_type)[2]
+    pk_no_damage_from = get_damage_from(pk_type)[2]
     print("Pokemon type is: ", pk_type_pk)
     print("Pokemon strength is against: ", pk_damage_to)
     print("Pokemon half strength is against: ", pk_half_damage_to)
