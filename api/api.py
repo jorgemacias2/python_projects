@@ -41,7 +41,7 @@ def greetings():
 @app.route("/user", methods = ["GET"])
 def index():
     users = query_db("select * from user")
-    list = [user["username"] for user in users]
+    list = [{"username": user[0], "password": user[1]} for user in users]
     print(users)
     print(list)
     return jsonify(list)
