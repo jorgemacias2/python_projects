@@ -78,14 +78,14 @@ def get_damage_to(type):
 
 def get_points(pk1_data, pk2_data):
     pk_points = 0
-    if any(x in pk1_data["pk_type_pk"] for x in pk2_data["pk_damage_to"]):
-        pk_points = pk_points - 2
     if any(x in pk2_data["pk_type_pk"] for x in pk1_data["pk_damage_to"]):
         pk_points = pk_points + 2
     if any(x in pk1_data["pk_type_pk"] for x in pk2_data["pk_half_damage_to"]):
-        pk_points = pk_points - 0.5
+        pk_points = pk_points - 2
     if any(x in pk2_data["pk_type_pk"] for x in pk1_data["pk_half_damage_to"]):
-        pk_points = pk_points + 0.5
+        pk_points = pk_points + 2
+    if any(x in pk1_data["pk_type_pk"] for x in pk2_data["pk_damage_to"]):
+        pk_points = pk_points - 2
     else:
         pk_points = pk_points + 0
     return pk_points
@@ -145,11 +145,17 @@ pk1_result = input_pokemon(pk1_name_input)
 pk2_name_input = input("Which is your second Pokemon choice: ")
 pk2_result = input_pokemon(pk2_name_input)
 
-pk_winner = get_winner(pk1_result, pk2_result)
-print("The winner is...: ", pk_winner)
+#pk_winner = get_winner(pk1_result, pk2_result)
+#print("The winner is...: ", pk_winner)
 
 pk_points = get_points(pk1_result, pk2_result)
 if pk_points == 0:
+    if pk1_result["pk_bs_avg"] > pk2_result["pk_bs_avg"]:
+        print("The winner is...: ", pk1_name_input)
+    if pk2_result["pk_bs_avg"] > pk1_result["pk_bs_avg"]:
+        print("The winner is...: ", pk2_name_input)
+    else:
+        print("Points winner: Can't be determined")
     print("Points winner: Can't be determined")
 elif pk_points > 0:
     print("Points winner: ", pk1_name_input, "with", pk_points, "points")
